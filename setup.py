@@ -2,12 +2,10 @@ from distutils.core import setup
 
 VERSION = '0.1'
 
-desc = """Misc date and time utilities, including conversion between local and utc timezone date-time values
-and date-time string parsing (fuzzy and non-fuzzy).
+desc = """Datetime handling, time-zone conversions and date string parsing (fuzzy and non-fuzzy).
 
-The normalized module handles conversions between local and utc values, but does not carry time zone information,
-this is particularly useful for situation like storing utc datetimes in a database as sqlite who does not support
-time zones information and we need to convert back utc values to local.
+The normalized module handles conversions between local and utc values without carrying time-zone information,
+this is needed in situation like storing utc-timestamps in sqlite database
 """
 
 name = 'dated'
