@@ -9,9 +9,9 @@ _day_first = date_parser.parserinfo(dayfirst=True)
 class DateParser(object):
 
     def parse_datetime(self, date_string, day_first=True):
-        kwargs = dict(fuzzy=True, parserinfo=_day_first if day_first else None)
+        parser_info = _day_first if day_first else None
 
-        parsed = date_parser.parse(date_string, **kwargs)
+        parsed = date_parser.parse(date_string, fuzzy=True, parserinfo=parser_info)
 
         return parsed
 
