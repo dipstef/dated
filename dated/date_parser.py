@@ -12,7 +12,6 @@ class DateParser(object):
         parser_info = _day_first if day_first else None
 
         parsed = date_parser.parse(date_string, fuzzy=True, parserinfo=parser_info)
-
         return parsed
 
     def parse_date(self, string_date, day_first=True):
