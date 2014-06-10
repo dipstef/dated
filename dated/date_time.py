@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import mktime
 
 
@@ -19,6 +19,10 @@ def to_seconds(time_delta):
     seconds = time_delta.seconds
     seconds += 24 * 60 * 60 * time_delta.days
     return seconds
+
+
+def seconds(value):
+    return timedelta(seconds=value)
 
 
 def exclude_milliseconds(date_time):
