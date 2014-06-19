@@ -13,12 +13,12 @@ class timezoned(datedtime):
         return super(timezoned, cls)._new_datetime(year, month, day, hour, minute, second, microsecond, tzinfo)
 
 
-class timezoned_local(timezoned):
-    _time_zone = timezone.local
+class local(timezoned):
+    _timezone = timezone.local
 
 
-class timezoned_utc(timezoned):
-    _time_zone = timezone.utc
+class utc(timezoned):
+    _timezone = timezone.utc
 
     def to_local(self):
         return self.astimezone(timezone.local)

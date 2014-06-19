@@ -86,11 +86,11 @@ def _time_delta_test():
 
 
 def main():
-    from dated.timezoned import timezoned_utc, timezoned_local
+    from dated.timezoned import utc, local
     from dated import notz
 
     _run_tests(notz.utc, notz.local)
-    _run_tests(timezoned_utc, timezoned_local, must_have_timestamp=True)
+    _run_tests(utc, local, must_have_timestamp=True)
 
     _time_delta_test()
 

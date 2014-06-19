@@ -18,25 +18,25 @@ class dated(datedtime):
 def to_string(value, format=formatting.default):
     if format == formatting.default and is_midnight(value):
         return date_string(value)
-    return datedtime.from_datetime(value).to_string(format)
+    return dated.from_datetime(value).to_string(format)
 
 
 def date_string(value):
-    return datedtime.from_datetime(value).date_string(format)
+    return dated.from_datetime(value).date_string(format)
 
 
 def date_from_string(value):
-    return datedtime.from_string(value).datetime()
+    return dated.from_string(value).midnight()
 
 
-def datetime_date(date_time):
-    return datedtime(date_time).datetime()
+def datetime_date(value):
+    return dated(value).midnight()
 
 
 def today():
-    now = datedtime.now()
-    return now.datetime()
+    now = dated.now()
+    return now.midnight()
 
 
-def is_midnight(date_time):
-    return date_time.hour == 0 and date_time.minute == 0 and date_time.second == 0
+def is_midnight(dt):
+    return dt.hour == 0 and dt.minute == 0 and dt.second == 0
