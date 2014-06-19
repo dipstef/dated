@@ -17,18 +17,15 @@ Without visible timezones
 
     from dated import utc
 
-    now_utc = utc.now()
-    <class 'dated.notz.utc'>
-    2014-06-19 21:22:47.007282
+    >>> now_utc = utc.now()
+    "<class 'dated.notz.utc'>, 2014-06-19 21:22:47.007282"
     assert not now_utc.tzinfo
 
-    now_local = now_utc.to_local()
-    <class 'dated.notz.local'>
-    2014-06-19 22:22:47.007282
+    >>> now_local = now_utc.to_local()
+    "<class 'dated.notz.local'>, 2014-06-19 22:22:47.007282"
 
-    utc_back = now_local.to_utc()
-    <class 'dated.notz.utc'>
-    2014-06-19 21:22:47.007282
+    >>> utc_back = now_local.to_utc()
+    "<class 'dated.notz.utc'>, 2014-06-19 21:22:47.007282"
     assert now_utc == utc_back
 
 In reality the timezone information is there but is not visible
