@@ -67,8 +67,9 @@ Uses ``parsedatetime`` for fuzzy timestamp string parsing:
 
 .. code-block:: python
 
-    >>> now_fuzzy = local.from_fuzzy_string('(2 days ago, 1 hour ago, 5 minutes ago')
-    assert now_fuzzy == local.now().replace(microsecond=0) - datetime.timedelta(days=2, hours=1, minutes=5)
+    >>> now_fuzzy = local.from_fuzzy_string('(3 days ago, 1 hour ago, 5 minutes ago')
+    "<class 'dated.notz.local'>, '2014-06-16 21:22:42"
+
 
 Offsets:
 
@@ -83,6 +84,10 @@ With visible timezones, the string format includes timezone information
 
 .. code-block:: python
 
+    from dated.timezoned import utc, local
+    from dated import timezone
+
+
     >>> tz_utc = utc(local_parsed.astimezone(tz=timezone.utc))
     "<class 'dated.timezoned.utc'>, 2014-06-19 21:22:47.007282+00:00"
     assert tz_utc.tzinfo is timezone.utc
@@ -93,6 +98,10 @@ With visible timezones, the string format includes timezone information
 
     >>> tz_local = tz_utc.to_local()
     "<class 'dated.timezoned.local'>, 2014-06-19 22:22:47.007282+01:00"
+
     assert tz_local.tzinfo is timezone.local
     >>> tz_local.verbose()
     '19 June 2014, 22:22:47 BST'
+
+    >>> timezone.local_tz_str()
+    'BST'

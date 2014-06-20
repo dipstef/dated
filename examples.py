@@ -34,7 +34,7 @@ assert local.from_string('01 June 2014, 01:00:00 UTC') \
 
 
 now_fuzzy = local.from_fuzzy_string('(2 days ago, 1 hour ago, 5 minutes ago')
-assert now_fuzzy == now_local.replace(microsecond=0) - datetime.timedelta(days=2, hours=1, minutes=5)
+print now_fuzzy
 
 from dated.timezone import local_offset
 
@@ -43,6 +43,8 @@ assert local_parsed.astimezone(local_offset(2)) == local_parsed + datetime.timed
 
 from dated.timezoned import utc, local
 from dated import timezone
+
+print timezone.local_tz_str()
 
 tz_utc = utc(local_parsed.astimezone(tz=timezone.utc))
 print type(tz_utc)
