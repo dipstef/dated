@@ -40,3 +40,11 @@ def today():
 
 def is_midnight(dt):
     return dt.hour == 0 and dt.minute == 0 and dt.second == 0
+
+
+def utc_from_string(value):
+    return local.from_string(value).to_utc()
+
+
+def utc_from_fuzzy_string(value):
+    return local.from_fuzzy_string(value).to_utc()

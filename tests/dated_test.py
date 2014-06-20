@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from dated import parser, date_from_string
 from dated.timedelta import to_seconds
+from dated.timezone import local_tz_str
 
 
 def _date_conversion_test(utc, local, must_have_timestamp=False):
@@ -17,21 +18,23 @@ def _date_conversion_test(utc, local, must_have_timestamp=False):
 
 
 def _parse_date_test(utc, local, must_have_time_stamp=False):
-    _str = str if not must_have_time_stamp else lambda v: v+' UTC'
-    assert _str('01 March 2006, 07:42:00') == utc.from_string('01-03-2006, 07:42').verbose()
+    _utc_str = str if not must_have_time_stamp else _str_to_utc
+    _local_str = str if not must_have_time_stamp else _str_to_local
+
+    assert _utc_str('01 March 2006, 07:42:00') == utc.from_string('01-03-2006, 07:42').verbose()
     assert '01 March 2006, 00:00:00' == utc.from_string('01-03-2006').verbose()
 
-    assert _str('16 June 2013, 23:00:00') == local.from_string('17.06.2013, 00:00').to_utc().verbose()
+    assert _utc_str('16 June 2013, 23:00:00') == local.from_string('17.06.2013, 00:00').to_utc().verbose()
     assert '17 June 2013, 00:00:00' == utc.from_string('17.06.2013').verbose()
 
     local_date = local.from_string('01.06.2013, 00:00')
-    assert _str('31 May 2013, 23:00:00') == local_date.to_utc().verbose()
+    assert _utc_str('31 May 2013, 23:00:00') == local_date.to_utc().verbose()
     assert '01 June 2013, 00:00:00' == utc.from_string('01.06.2013').verbose()
 
-    assert _str('31 May 2013, 23:00:00') == local.from_string('2013.06.01, 00:00').to_utc().verbose()
+    assert _utc_str('31 May 2013, 23:00:00') == local.from_string('2013.06.01, 00:00').to_utc().verbose()
     assert '01 June 2013, 00:00:00' == utc.from_string('2013.06.01').verbose()
 
-    assert _str('16 June 2013, 23:00:00') == local.from_string('Jun 17, 2013, 00:00').to_utc().verbose()
+    assert _utc_str('16 June 2013, 23:00:00') == local.from_string('Jun 17, 2013, 00:00').to_utc().verbose()
     assert '17 June 2013, 00:00:00' == utc.from_string('Jun 17, 2013').verbose()
 
     assert '02 December 1985, 00:00:00' == utc.from_string('Dec. 2, 1985').verbose()
@@ -42,6 +45,16 @@ def _parse_date_test(utc, local, must_have_time_stamp=False):
     except ValueError:
         pass
 
+    assert _local_str('01 June 2013, 01:00:00') == local.from_string('2013.06.01, 00:00 UTC').verbose()
+    assert _utc_str('31 May 2013, 23:00:00') == utc.from_string('2013.06.01, 00:00 GMT').verbose()
+
+
+def _str_to_utc(value):
+    return value + ' UTC'
+
+
+def _str_to_local(value):
+    return value + ' ' + local_tz_str()
 
 
 def _fuzzy_date_string_test(module):

@@ -17,6 +17,9 @@ class no_timezone(datedtime):
 class local(no_timezone):
     _timezone = timezone.local
 
+    def to_utc(self):
+        return utc(super(local, self).to_utc())
+
 
 class utc(no_timezone):
     _timezone = timezone.utc

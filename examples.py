@@ -1,3 +1,4 @@
+import datetime
 from dated import utc,local
 
 now_utc = utc.now()
@@ -11,53 +12,46 @@ print type(utc_back)
 print utc_back
 assert now_utc == utc_back
 
-print now_utc._timezone
-print now_local._timezone
-
 local_parsed = local.from_string(str(now_local))
 print local_parsed
 assert local_parsed == now_local
 
-print
-from datetime import datetime
 
+local_parsed = local.from_string('2014-06-19 22:22:47.007282')
+#assert local_parsed == now_local
+print local_parsed.verbose(with_millisec=True)
+verbose_parsed = local.from_string(local_parsed.verbose(with_millisec=True))
+assert local_parsed == verbose_parsed
+
+
+print local.from_string('2014.06.01, 00:00 UTC').verbose()
+
+print utc.from_string('2014.06.01, 00:00 UTC').verbose()
+
+
+assert local.from_string('01 June 2014, 01:00:00 UTC') \
+    == utc.from_string('01 June 2014, 01:00:00 UTC').to_local()
+
+
+now_fuzzy = local.from_fuzzy_string('(2 days ago, 1 hour ago, 5 minutes ago')
+assert now_fuzzy == now_local.replace(microsecond=0) - datetime.timedelta(days=2, hours=1, minutes=5)
+
+from dated.timezone import local_offset
+
+assert local_parsed.astimezone(local_offset(2)) == local_parsed + datetime.timedelta(hours=2)
+
+
+from dated.timezoned import utc, local
 from dated import timezone
-from dated.dated import datedtime
-from dated.timezoned import timezoned, utc
 
+tz_utc = utc(local_parsed.astimezone(tz=timezone.utc))
+print type(tz_utc)
+assert tz_utc.tzinfo is timezone.utc
+print tz_utc
+print tz_utc.verbose()
 
-now_utc = utc.now()
-print now_utc
-assert now_utc.tzinfo == timezone.utc
-
-
-
-datetime_now = datetime.now()
-print datedtime(datetime_now)
-
-print 'Utc Date: ', now_utc
-timezoned_utc_now = timezoned(now_utc)
-print 'Time zoned utc: ', timezoned_utc_now
-print timezoned_utc_now
-print timezoned_utc_now.astimezone(timezone.local)
-
-
-print type(timezoned_utc_now.utcnow())
-
-print 'Two days ago: ', utc.from_fuzzy_string('two days ago')
-print 'Timezoned two days ago: ', utc.from_fuzzy_string('two days ago')
-
-#print datetime.now()
-timezoned_utc_now_from_string = utc.from_string(str(timezoned_utc_now))
-print timezoned_utc_now_from_string
-no_time_zone_utc_from_string = utc.from_string(str(timezoned_utc_now))
-print no_time_zone_utc_from_string
-
-assert timezoned_utc_now == timezoned_utc_now_from_string
-
-print timezoned_utc_now_from_string
-print timezoned_utc_now_from_string.to_string()
-
-print timezoned_utc_now_from_string.verbose()
-print no_time_zone_utc_from_string.verbose()
-print no_time_zone_utc_from_string.to_string()
+tz_local = tz_utc.to_local()
+print type(tz_local)
+assert tz_local.tzinfo is timezone.local
+print tz_local
+print tz_local.verbose()

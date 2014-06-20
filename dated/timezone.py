@@ -8,9 +8,9 @@ local = tzlocal()
 class LocalOffset(tzlocal):
     def __init__(self, hours):
         super(LocalOffset, self).__init__()
-        seconds = timedelta(hours=hours)
-        self._dst_offset += seconds
-        self._std_offset += seconds
+        hours_delta = timedelta(hours=hours)
+        self._dst_offset += hours_delta
+        self._std_offset += hours_delta
 
 
 def local_offset(hours):
@@ -23,3 +23,7 @@ def convert_to_local_offset(date_time, plus):
 
 def local_utc_offset():
     return local.utcoffset(datetime.now())
+
+
+def local_tz_str():
+    return datetime.now(tz=local).strftime('%Z')

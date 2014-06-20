@@ -22,7 +22,7 @@ class datedtime(datetime):
     def _new_datetime(cls, year=None, month=None, day=None, hour=None, minute=None, second=None, microsecond=None,
                       tzinfo=None):
         value = super(datedtime, cls).__new__(cls, year, month, day, hour, minute, second, microsecond, tzinfo)
-        value._time_zone = value.tzinfo or cls._timezone
+        value._timezone = value.tzinfo or cls._timezone
         return value
 
     @classmethod
@@ -35,10 +35,16 @@ class datedtime(datetime):
 
     @classmethod
     def from_string(cls, value, day_first=True):
-        tz_string = datetime.now(tz=cls._timezone).strftime('%Z')
-        if not tz_string in value:
-            value += ' ' + tz_string
         parsed = parser.parse_datetime(value, day_first=day_first)
+
+        if parsed.hour or parsed.minute or parsed.second or parsed.microsecond or parsed.tzinfo:
+            if not parsed.tzinfo:
+                value += datetime.now(tz=cls._timezone).strftime('%Z')
+                parsed = parser.parse_datetime(value, day_first=day_first)
+            elif parsed.tzinfo != cls._timezone:
+                parsed = parsed.astimezone(cls._timezone)
+        #else:
+        #    parsed = parsed.replace(tzinfo=timezone.local)
 
         return cls.from_datetime(parsed)
 
@@ -56,12 +62,12 @@ class datedtime(datetime):
     def date_string(self):
         return self.to_string(format=formatting.date_default)
 
-    def verbose(self):
-        return self.to_string(format=formatting.verbose)
+    def verbose(self, with_millisec=False):
+        return self.to_string(format=formatting.verbose if not with_millisec else formatting.verbose_and_millisec)
 
-    def astimezone(self, timezone):
+    def astimezone(self, tz):
         to_timezone = self.replace(tzinfo=self._timezone)
-        as_timezone = datetime.astimezone(to_timezone, tz=timezone)
+        as_timezone = datetime.astimezone(to_timezone, tz=tz)
         return self.from_datetime(as_timezone)
 
     def to_utc(self):
