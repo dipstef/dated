@@ -1,24 +1,46 @@
-from distutils.core import setup
+#!/usr/bin/env python
 
-VERSION = '0.1'
+import os
+import sys
 
-desc = """Datetime handling, time-zone conversions and date string parsing (fuzzy and non-fuzzy).
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
-The normalized module handles conversions between local and utc values without carrying time-zone information,
-this is needed in situation like storing utc-timestamps in sqlite databasehttps://github.com/dipstef/collected
-"""
+settings = dict()
 
-name = 'dated'
+# Publish Helper.
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    sys.exit()
 
-setup(name=name,
-      version=VERSION,
-      author='Stefano Dipierro',
-      author_email='dipstef@github.com',
-      url='http://github.com/dipstef/{}/'.format(name),
-      description='Datetime handling and time-zone conversions functions',
-      license='http://www.apache.org/licenses/LICENSE-2.0',
-      packages=[name],
-      platforms=['Any'],
-      long_description=desc,
-      requires=['dateutil', 'parsedatetime']
+CLASSIFIERS = [
+    'Intended Audience :: Developers',
+    'Natural Language :: English',
+    'License :: OSI Approved :: Apache Software License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2.6',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.2',
+    'Topic :: Internet',
+    'Topic :: Utilities',
+]
+
+settings.update(
+    name='dated',
+    version='0.1',
+    description='Enriches the datetime module with date string parsing (fuzzy and non-fuzzy) and time zone aware '
+                'functions.',
+    long_description=open('README.rst').read(),
+    author='Stefano Dipierro',
+    license='Apache 2.0',
+    url='https://github.com/dipstef/dated',
+    classifiers=CLASSIFIERS,
+    keywords='datetime date timestamp timezone parsing fuzzy',
+    packages=['dated'],
+    test_suite='tests',
+    requires=['dateutil', 'parsedatetime']
 )
+
+setup(**settings)

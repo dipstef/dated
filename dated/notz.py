@@ -1,4 +1,4 @@
-from dated import datedtime, timezone
+from . import datedtime, timezone
 
 
 class no_timezone(datedtime):
