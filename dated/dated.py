@@ -2,6 +2,7 @@ from datetime import datetime
 from . import timezone
 from . import parser
 from . import formatting
+from time import mktime
 
 
 class datedtime(datetime):
@@ -24,6 +25,10 @@ class datedtime(datetime):
         value = super(datedtime, cls).__new__(cls, year, month, day, hour, minute, second, microsecond, tzinfo)
         value._timezone = value.tzinfo or cls._timezone
         return value
+
+    @classmethod
+    def from_time_tuple(cls, time_tuple):
+        return cls.fromtimestamp(mktime(time_tuple))
 
     @classmethod
     def now(cls, timezone=None):
