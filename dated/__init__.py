@@ -22,7 +22,7 @@ def to_string(value, format=formatting.default):
 
 
 def date_string(value):
-    return dated.from_datetime(value).date_string(format)
+    return dated.from_datetime(value).date_string()
 
 
 def date_from_string(value):
