@@ -80,3 +80,7 @@ class datedtime(datetime):
 
     def midnight(self):
         return self.__class__(self.year, self.month, self.day)
+
+    def to_datetime(self):
+        return datetime(self.year, self.month, self.day, self.hour, self.minute, self.second, self.microsecond,
+                        self.tzinfo)
