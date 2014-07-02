@@ -8,4 +8,8 @@ verbose = '%d %B %Y, %H:%M:%S %Z'
 verbose_and_millisec = '%d %B %Y, %H:%M:%S.%f %Z'
 
 default = year_first_and_milli_sec
-date_default = year_first
+
+year_first_date = '%Y-%m-%d'
+year_after_date = '%d-%m-%Y'
+
+date_default = year_first_date
