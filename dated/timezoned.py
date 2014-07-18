@@ -22,15 +22,32 @@ class timezoned(datedtime):
             raise ValueError(str(dt) + ', must have timezone')
         return dt
 
+    def astimezone(self, tz):
+        converted = self._convert_to(tz)
+        if tz == timezone.utc:
+            return utc(converted)
+        elif tz == timezone.local:
+            return local(converted)
+        return timezoned(converted)
 
-class local(timezoned):
+
+class force_tz(timezoned):
+
+    @classmethod
+    def from_datetime(cls, dt):
+        if dt.tzinfo and dt.tzinfo != cls._timezone:
+            dt = dt.astimezone(cls._timezone)
+        return super(force_tz, cls).from_datetime(dt)
+
+
+class local(force_tz):
     _timezone = timezone.local
 
     def to_utc(self):
         return utc(super(local, self).to_utc())
 
 
-class utc(timezoned):
+class utc(force_tz):
     _timezone = timezone.utc
 
     def to_local(self):

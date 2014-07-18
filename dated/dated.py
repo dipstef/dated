@@ -13,7 +13,9 @@ class datedtime(datetime):
         if len(args) == 1 and isinstance(args[0], datetime):
             return cls.from_datetime(args[0])
         else:
-            return super(datedtime, cls).__new__(cls, *args)
+            value = super(datedtime, cls).__new__(cls, *args)
+            value._timezone = value.tzinfo or cls._timezone
+            return value
 
     @classmethod
     def from_datetime(cls, dt):
@@ -48,8 +50,6 @@ class datedtime(datetime):
                 parsed = parser.parse_datetime(value, day_first=day_first)
             elif parsed.tzinfo != cls._timezone:
                 parsed = parsed.astimezone(cls._timezone)
-        #else:
-        #    parsed = parsed.replace(tzinfo=timezone.local)
 
         return cls.from_datetime(parsed)
 
@@ -71,12 +71,19 @@ class datedtime(datetime):
         return self.to_string(format=formatting.verbose if not with_millisec else formatting.verbose_and_millisec)
 
     def astimezone(self, tz):
+        as_timezone = self._convert_to(tz)
+        return self.from_datetime(as_timezone)
+
+    def _convert_to(self, tz):
         to_timezone = self.replace(tzinfo=self._timezone)
         as_timezone = datetime.astimezone(to_timezone, tz=tz)
-        return self.from_datetime(as_timezone)
+        return as_timezone
 
     def to_utc(self):
         return self.astimezone(timezone.utc)
+
+    def to_local(self):
+        return self.astimezone(timezone.local)
 
     def midnight(self):
         return self.__class__(self.year, self.month, self.day)
