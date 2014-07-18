@@ -23,7 +23,8 @@ class force_tz(no_timezone):
 
     @classmethod
     def from_datetime(cls, dt):
-        if dt.tzinfo and dt.tzinfo != cls._timezone:
+        tz = dt._timezone if isinstance(dt, datedtime) else dt.tzinfo
+        if tz and tz != cls._timezone:
             dt = dt.astimezone(cls._timezone)
         return super(force_tz, cls).from_datetime(dt)
 
