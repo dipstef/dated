@@ -88,7 +88,7 @@ def __unsupported_abbreviations():
         for tz_code in tz_desc[1:]:
             try:
                 tzinfo = dp.parse(s+' '+tz_code).tzinfo
-            except ValueError:
+            except:
                 tzinfo = None
             if not tzinfo:
                 tz_dict[tz_code] = tz_offset
